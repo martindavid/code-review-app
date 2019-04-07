@@ -1,3 +1,3 @@
 CREATE DATABASE users_prod;
 CREATE DATABASE users_dev;
-CREATE DATABASE userstest;
+CREATE DATABASE users_test;
