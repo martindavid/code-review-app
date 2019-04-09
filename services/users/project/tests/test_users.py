@@ -36,9 +36,10 @@ class TestUserService(BaseTestCase):
             )
             data = json.loads(response.data.decode())
             self.assertEqual(response.status_code, 201)
-            self.assertIn('mvalentino@martinlabs.me was added', data['message'])
+            self.assertIn('mvalentino@martinlabs.me was added',
+                          data['message'])
             self.assertIn('success', data['status'])
-    
+
     def test_add_user_invalid_json(self):
         """Ensure error is thrown if the JSON object is empty."""
         with self.client:
@@ -59,14 +60,13 @@ class TestUserService(BaseTestCase):
         with self.client:
             response = self.client.post(
                 '/users',
-                data=json.dumps({ 'email': 'mvalentino@martinlabs.me' }),
+                data=json.dumps({'email': 'mvalentino@martinlabs.me'}),
                 content_type='application/json'
             )
             data = json.loads(response.data.decode())
             self.assertEqual(response.status_code, 400)
             self.assertIn('Invalid payload', data['message'])
             self.assertIn('fail', data['status'])
-
 
     def test_add_user_duplicate_email(self):
         """Ensure error is thrown if the email already exists."""
@@ -140,7 +140,8 @@ class TestUserService(BaseTestCase):
 
     def test_main_with_users(self):
         """
-        Ensure the main route behave correctly when users have been added to the database
+        Ensure the main route behave correctly when users have
+        been added to the database
         """
         add_user('mvalentino', 'mvalentino@martinlabs.me')
         add_user('martin.valentino', 'martin.valentino@martinlabs.me')
@@ -159,7 +160,8 @@ class TestUserService(BaseTestCase):
         with self.client:
             response = self.client.post(
                 '/',
-                data=dict(username='mvalentino', email='mvalentino@martinlabs.me'),
+                data=dict(username='mvalentino',
+                          email='mvalentino@martinlabs.me'),
                 follow_redirects=True
             )
             self.assertEqual(response.status_code, 200)
