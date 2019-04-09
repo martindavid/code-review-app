@@ -5,3 +5,4 @@ Flask-Testing==0.7.1
 gunicorn==19.9.0
 coverage==4.5.2
 flake8===3.6.0
+flask-debugtoolbar==0.10.1
