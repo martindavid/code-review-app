@@ -4,6 +4,7 @@ import axios from 'axios';
 import * as serviceWorker from './serviceWorker';
 
 import UsersList from './components/UsersList';
+import AddUser from './components/AddUser';
 
 
 class App extends Component {
@@ -11,13 +12,35 @@ class App extends Component {
   constructor(){
     super();
     this.state = {
-      users: []
+      users: [],
+      username: '',
+      email: '',
     }
   }
 
   componentDidMount(){
     this.getUsers();
   }
+
+  addUser = (e) => {
+    e.preventDefault();
+    const data = {
+      username: this.state.username,
+      email: this.state.email,
+    };
+    axios.post(`${process.env.REACT_APP_USERS_SERVICE_URL}/users`, data)
+      .then((res) => {
+        this.getUsers();
+        this.setState({ username: '', email: '' })
+      }) 
+      .catch((err) => console.log(err));
+  };
+
+  handleChange = (e) => {
+    const obj = {};
+    obj[e.target.name] = e.target.value;
+    this.setState(obj);
+  };
 
   getUsers() {
     axios.get(`${process.env.REACT_APP_USERS_SERVICE_URL}/users`)
@@ -29,6 +52,7 @@ class App extends Component {
   }
 
   render() {
+    const { email, username } = this.state;
     return (
       <section className="section">
         <div className='container'>
@@ -36,6 +60,13 @@ class App extends Component {
             <div className='column is-one-third'>
               <br/>
               <h1 className='title is-1 is-1'>All Users</h1>
+              <hr/><br/>
+              <AddUser
+                addUser={this.addUser}
+                email={email}
+                username={username}
+                handleChange={this.handleChange}
+              />
               <hr/><br/>
               <UsersList users={this.state.users} />
             </div>
