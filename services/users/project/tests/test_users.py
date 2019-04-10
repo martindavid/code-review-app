@@ -2,15 +2,7 @@ import json
 import unittest
 
 from project.tests.base import BaseTestCase
-from project import db
-from project.api.models import User
-
-
-def add_user(username: str, email: str):
-    user = User(username=username, email=email)
-    db.session.add(user)
-    db.session.commit()
-    return user
+from project.tests.utils import add_user
 
 
 class TestUserService(BaseTestCase):

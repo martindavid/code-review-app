@@ -20,7 +20,6 @@ def index():
 
 @users_blueprint.route('/users', methods=['GET'])
 def get_all_users():
-    print('I got hit')
     """Get all users"""
     response_object = {
         'status': 'success',
