@@ -31,10 +31,12 @@ class User(db.Model):
     def encode_auth_token(self, user_id: int):
         """Generates the auth token"""
         try:
+            exp_days = current_app.config.get('TOKEN_EXPIRATION_DAYS')
+            exp_sec = current_app.config.get('TOKEN_EXPIRATION_SECONDS')
             payload = {
                 'exp': datetime.datetime.utcnow() + datetime.timedelta(
-                    days=current_app.config.get('TOKEN_EXPIRATION_DAYS'),
-                    seconds=current_app.config.get('TOKEN_EXPIRATION_SECONDS')),
+                    days=exp_days,
+                    seconds=exp_sec),
                 'iat': datetime.datetime.utcnow(),
                 'sub': user_id
             }
