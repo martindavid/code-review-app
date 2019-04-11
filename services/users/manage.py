@@ -36,11 +36,18 @@ def test():
 
     return 1
 
+
 @cli.command('seed_db')
 def seed_db():
     """Seeds the database."""
-    db.session.add(User(username='mvalentino', email='mvalentino@martinlabs.me'))
-    db.session.add(User(username='martin.valentino', email='martin.valentino@live.com'))
+    db.session.add(User(
+        username='mvalentino',
+        email='mvalentino@martinlabs.me',
+        password='greaterthaneight'))
+    db.session.add(User(
+        username='martin.valentino',
+        email='martin.valentino@live.com',
+        password='greaterthaneight'))
     db.session.commit()
 
 @cli.command()
@@ -57,6 +64,7 @@ def cov():
         COV.erase()
         return 0
     return 1
+
 
 if __name__ == '__main__':
     cli()

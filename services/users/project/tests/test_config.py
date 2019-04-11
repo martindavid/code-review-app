@@ -15,6 +15,9 @@ class TestDevelopmentConfig(TestCase):
         return app
 
     def test_app_is_development(self):
+        """
+        Ensure development environment has correct parameter
+        """
         self.assertTrue(
             app.config['SECRET_KEY'] == os.environ.get('SECRET_KEY'))
         self.assertFalse(current_app is None)
@@ -34,6 +37,9 @@ class TestTestingConfig(TestCase):
         return app
 
     def test_app_is_testing(self):
+        """
+        Ensure testing environment has correct parameter
+        """
         self.assertTrue(
             app.config['SECRET_KEY'] == os.environ.get('SECRET_KEY'))
         self.assertTrue(app.config['TESTING'])
@@ -54,6 +60,9 @@ class TestProductionConfig(TestCase):
         return app
 
     def test_app_is_production(self):
+        """
+        Ensure production environment has correct parameter
+        """
         self.assertTrue(
             app.config['SECRET_KEY'] == os.environ.get('SECRET_KEY'))
         self.assertFalse(app.config['TESTING'])
