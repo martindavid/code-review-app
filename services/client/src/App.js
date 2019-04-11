@@ -5,6 +5,7 @@ import UsersList from './components/UsersList';
 import AddUser from './components/AddUser';
 import Navbar from './components/Navbar';
 import About from './components/About';
+import Form from './components/Form';
 
 
 class App extends Component {
@@ -16,6 +17,11 @@ class App extends Component {
       username: '',
       email: '',
       title: 'Code Review App',
+      formData: {
+        username: '',
+        email: '',
+        password: ''
+      }
     }
   }
 
@@ -53,7 +59,7 @@ class App extends Component {
   }
 
   render() {
-    const { email, username, title } = this.state;
+    const { email, username, title, formData } = this.state;
     return (
       <React.Fragment>
         <Navbar title={title} />
@@ -77,7 +83,19 @@ class App extends Component {
                       <UsersList users={this.state.users} />
                     </div>
                   )}/>
-                  <Route exact path='/about' component={About} />
+                 <Route exact path='/about' component={About} />
+                 <Route exact path='/register' render={() => (
+                   <Form
+                     formType={'Register'}
+                     formData={formData}
+                   />
+                 )} />
+                 <Route exact path='/login' render={() => (
+                   <Form
+                     formType={'Login'}
+                     formData={formData}
+                   />
+                 )} />
                 </Switch>
               </div>
             </div>
