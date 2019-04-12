@@ -1,27 +1,15 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`{el.formType} Form renders a snapshot properly 1`] = `
+exports[`When not authenticated Login Form renders a snapshot properly 1`] = `
 <div>
   <h1
     className="title is-1"
   >
-    Register
+    Log In
   </h1>
   <hr />
   <br />
   <form>
-    <div
-      className="field"
-    >
-      <input
-        className="input is-medium"
-        name="username"
-        placeholder="Enter a username"
-        required={true}
-        type="text"
-        value=""
-      />
-    </div>
     <div
       className="field"
     >
@@ -55,16 +43,28 @@ exports[`{el.formType} Form renders a snapshot properly 1`] = `
 </div>
 `;
 
-exports[`{el.formType} Form renders a snapshot properly 2`] = `
+exports[`When not authenticated Register Form renders a snapshot properly 1`] = `
 <div>
   <h1
     className="title is-1"
   >
-    Log In
+    Register
   </h1>
   <hr />
   <br />
   <form>
+    <div
+      className="field"
+    >
+      <input
+        className="input is-medium"
+        name="username"
+        placeholder="Enter a username"
+        required={true}
+        type="text"
+        value=""
+      />
+    </div>
     <div
       className="field"
     >
