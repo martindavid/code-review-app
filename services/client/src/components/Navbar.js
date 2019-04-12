@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 
-const Navbar = ({ title }) => {
+const Navbar = ({ title, isAuthenticated }) => {
   return (
     <nav className='navbar is-dark' role='navigation' aria-label='main navigation'>
       <section className='container'>
@@ -29,8 +29,8 @@ const Navbar = ({ title }) => {
           </div>
           <div className='navbar-end'>
             <Link to='/register' className='navbar-item'>Register</Link>
-            <Link to='/login' className='navbar-item'>Login</Link>
-            <Link to='/logout' className='navbar-item'>Logout</Link>
+            { !isAuthenticated && <Link to='/login' className='navbar-item'>Login</Link> }
+            { isAuthenticated && <Link to='/logout' className='navbar-item'>Logout</Link> }
           </div>
         </div>
       </section>

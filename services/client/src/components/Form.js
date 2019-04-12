@@ -1,7 +1,12 @@
 import React from 'react';
+import { Redirect } from 'react-router-dom';
 
 const Form = (props) => {
-  const { formType, formData, handleUserFormSubmit, handleFormChange } = props;
+  const { formType, formData, handleUserFormSubmit, handleFormChange, isAuthenticated } = props;
+
+  if (isAuthenticated) {
+    return <Redirect to='/' />
+  } 
   return (
     <div>
       {formType === 'Login' && 

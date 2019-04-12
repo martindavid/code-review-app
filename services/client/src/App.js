@@ -5,6 +5,7 @@ import UsersList from './components/UsersList';
 import AddUser from './components/AddUser';
 import Navbar from './components/Navbar';
 import About from './components/About';
+import Logout from './components/Logout';
 import Form from './components/Form';
 
 
@@ -21,13 +22,14 @@ class App extends Component {
         username: '',
         email: '',
         password: ''
-      }
+      },
+      isAuthenticated: false
     }
-  }
+  };
 
   componentDidMount(){
     this.getUsers();
-  }
+  };
 
   addUser = (e) => {
     e.preventDefault();
@@ -43,26 +45,69 @@ class App extends Component {
       .catch((err) => console.log(err));
   };
 
+  clearFormState = () => {
+    this.setState({
+      formData: {username: '', email: '', password: ''},
+      username: '',
+      email: ''
+    });
+  };
+
   handleChange = (e) => {
     const obj = {};
     obj[e.target.name] = e.target.value;
     this.setState(obj);
   };
 
-  getUsers() {
+  handleFormChange = (e) => {
+    var formData = this.state.formData;
+    formData[e.target.name] = e.target.value;
+    this.setState(formData);
+  };
+
+  handleUserFormSubmit = (e) => {
+    e.preventDefault();
+    const { formData } = this.state;
+    const formType = window.location.href.split('/').reverse()[0]
+    let data = {
+      email: formData.email,
+      password: formData.password
+    }
+    if (formType === 'register') {
+      data.username = formData.username;
+    }
+
+    const url = `${process.env.REACT_APP_USERS_SERVICE_URL}/auth/${formType}`;
+    axios.post(url, data)
+      .then((res) => {
+        this.clearFormState();
+        window.localStorage.setItem('authToken', res.data.auth_token);
+        this.setState({ isAuthenticated: true });
+        this.getUsers();
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+  };
+
+  getUsers = () => {
     axios.get(`${process.env.REACT_APP_USERS_SERVICE_URL}/users`)
       .then((res) => { 
         this.setState({ users: res.data.data.users});
-        console.log(res);
       })
       .catch((err) => { console.log(err); })
+  };
+
+  logoutUser = () => {
+    window.localStorage.clear();
+    this.setState({ isAuthenticated: false });
   }
 
   render() {
-    const { email, username, title, formData } = this.state;
+    const { email, username, title, formData, isAuthenticated } = this.state;
     return (
       <React.Fragment>
-        <Navbar title={title} />
+        <Navbar title={title} isAuthenticated={isAuthenticated} />
         <section className="section">
           <div className='container'>
             <div className='columns'>
@@ -83,19 +128,31 @@ class App extends Component {
                       <UsersList users={this.state.users} />
                     </div>
                   )}/>
-                 <Route exact path='/about' component={About} />
-                 <Route exact path='/register' render={() => (
-                   <Form
-                     formType={'Register'}
-                     formData={formData}
-                   />
-                 )} />
-                 <Route exact path='/login' render={() => (
-                   <Form
-                     formType={'Login'}
-                     formData={formData}
-                   />
-                 )} />
+                  <Route exact path='/about' component={About} />
+                  <Route exact path='/register' render={() => (
+                    <Form
+                      formType={'Register'}
+                      formData={formData}
+                      handleFormChange={this.handleFormChange}
+                      handleUserFormSubmit={this.handleUserFormSubmit}
+                      isAuthenticated={isAuthenticated}
+                    />
+                  )} />
+                  <Route exact path='/login' render={() => (
+                    <Form
+                      formType={'Login'}
+                      formData={formData}
+                      handleFormChange={this.handleFormChange}
+                      handleUserFormSubmit={this.handleUserFormSubmit}
+                      isAuthenticated={isAuthenticated}
+                    />
+                  )} />
+                  <Route exact path='/logout' render={() => (
+                    <Logout
+                      logoutUser={this.logoutUser}
+                      isAuthenticated={isAuthenticated}
+                    />
+                  )} />
                 </Switch>
               </div>
             </div>
