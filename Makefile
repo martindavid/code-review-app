@@ -1,5 +1,7 @@
 docker-build:
 				docker-compose -f docker-compose-dev.yml up -d --build
+docker-logs:
+				docker-compose -f docker-compose-dev.yml logs -f
 docker-stop:
 				docker-compose -f docker-compose-dev.yml stop
 docker-down:

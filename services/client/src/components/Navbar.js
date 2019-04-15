@@ -25,12 +25,20 @@ const Navbar = ({ title, isAuthenticated }) => {
           <div className='navbar-start'>
             <Link to='/' className='navbar-item'>Home</Link>
             <Link to='/about' className='navbar-item'>About</Link>
-            <Link to='/status' className='navbar-item'>Status</Link>
+            { isAuthenticated && 
+                <Link to='/status' className='navbar-item'>Status</Link> }
           </div>
           <div className='navbar-end'>
-            <Link to='/register' className='navbar-item'>Register</Link>
-            { !isAuthenticated && <Link to='/login' className='navbar-item'>Login</Link> }
-            { isAuthenticated && <Link to='/logout' className='navbar-item'>Logout</Link> }
+            {
+              !isAuthenticated &&
+                <Link to='/register' className='navbar-item'>Register</Link>
+            }
+            { !isAuthenticated &&
+                <Link to='/login' className='navbar-item'>Login</Link> 
+            }
+            { isAuthenticated && 
+                <Link to='/logout' className='navbar-item'>Logout</Link> 
+            }
           </div>
         </div>
       </section>

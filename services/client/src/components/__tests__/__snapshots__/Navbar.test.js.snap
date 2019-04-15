@@ -46,13 +46,6 @@ exports[`Navbar renders a snapshot properly 1`] = `
         >
           About
         </a>
-        <a
-          className="navbar-item"
-          href="/status"
-          onClick={[Function]}
-        >
-          Status
-        </a>
       </div>
       <div
         className="navbar-end"

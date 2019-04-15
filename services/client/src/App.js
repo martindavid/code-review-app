@@ -6,6 +6,7 @@ import AddUser from './components/AddUser';
 import Navbar from './components/Navbar';
 import About from './components/About';
 import Logout from './components/Logout';
+import UserStatus from './components/UserStatus';
 import Form from './components/Form';
 
 
@@ -138,6 +139,7 @@ class App extends Component {
                       isAuthenticated={isAuthenticated}
                     />
                   )} />
+                  <Route exact path='/status' component={UserStatus} />
                   <Route exact path='/login' render={() => (
                     <Form
                       formType={'Login'}
