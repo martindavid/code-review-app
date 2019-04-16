@@ -3,6 +3,11 @@ from flask import request, jsonify
 from project.api.models import User
 
 
+def is_admin(user_id: int):
+    user = User.query.filter_by(id=user_id).first()
+    return user.admin
+
+
 def authenticate(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):

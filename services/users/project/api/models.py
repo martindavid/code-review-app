@@ -12,6 +12,7 @@ class User(db.Model):
     username = db.Column(db.String(128), nullable=False, unique=True)
     password = db.Column(db.String(255), nullable=False)
     email = db.Column(db.String(128), nullable=False, unique=True)
+    admin = db.Column(db.Boolean, default=False, nullable=False)
     active = db.Column(db.Boolean(), default=True, nullable=False)
 
     def __init__(self, username: str, email: str, password: str) -> None:
@@ -25,7 +26,8 @@ class User(db.Model):
             'id': self.id,
             'username': self.username,
             'email': self.email,
-            'active': self.active
+            'active': self.active,
+            'admin': self.admin
         }
 
     def encode_auth_token(self, user_id: int):
