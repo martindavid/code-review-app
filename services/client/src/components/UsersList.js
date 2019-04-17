@@ -4,13 +4,34 @@ import React from 'react';
 const UsersList = ({users}) => {
   return (
     <div>
-      {
-        users.map((user) => {
-          return (
-            <h4 key={user.id} className='box title is-4'>{user.username}</h4>
-          )
-        })
-      }
+      <h1 className='title is-1'>All Users</h1>
+      <hr/><br/>
+      <table className='table is-hoverable is-fullwidth'>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Email</th>
+            <th>Username</th>
+            <th>Active</th>
+            <th>Admin</th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            users.map((user) => {
+              return (
+                <tr key={user.id}>
+                  <td>{user.id}</td>
+                  <td>{user.email}</td>
+                  <td>{user.username}</td>
+                  <td>{String(user.active)}</td>
+                  <td>{String(user.admin)}</td>
+                </tr>
+              )
+            })
+          }
+        </tbody>
+      </table>
     </div>
   );
 }

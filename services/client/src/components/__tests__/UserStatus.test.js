@@ -13,7 +13,7 @@ describe('When authenticated', () => {
     );
     const wrapper = shallow(component);
     const element = wrapper.find('li');
-    expect(element.length).toBe(3);
+    expect(element.length).toBe(5);
     expect(element.get(0).props.children[0].props.children).toBe('User ID: ');
   });
 

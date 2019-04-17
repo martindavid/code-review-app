@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import axios from 'axios';
 import UsersList from './components/UsersList';
-import AddUser from './components/AddUser';
 import Navbar from './components/Navbar';
 import About from './components/About';
 import Logout from './components/Logout';
@@ -116,18 +115,7 @@ class App extends Component {
                 <br/>
                 <Switch>
                   <Route exact path='/' render={() => (
-                    <div>
-                      <h1 className='title is-1'>All Users</h1>
-                      <hr/><br/>
-                      <AddUser
-                        addUser={this.addUser}
-                        email={email}
-                        username={username}
-                        handleChange={this.handleChange}
-                      />
-                      <hr/><br/>
                       <UsersList users={this.state.users} />
-                    </div>
                   )}/>
                   <Route exact path='/about' component={About} />
                   <Route exact path='/register' render={() => (
@@ -139,7 +127,9 @@ class App extends Component {
                       isAuthenticated={isAuthenticated}
                     />
                   )} />
-                  <Route exact path='/status' component={UserStatus} />
+                <Route exact path='/status' render={() => (
+                  <UserStatus isAuthenticated={isAuthenticated} />
+                )} />
                   <Route exact path='/login' render={() => (
                     <Form
                       formType={'Login'}

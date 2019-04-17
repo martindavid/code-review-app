@@ -21,6 +21,18 @@ exports[`When authenticated UserStatus render a snapshot properly 1`] = `
       </strong>
       
     </li>
+    <li>
+      <strong>
+        Active: 
+      </strong>
+      
+    </li>
+    <li>
+      <strong>
+        Admin: 
+      </strong>
+      
+    </li>
   </ul>
 </div>
 `;
