@@ -78,7 +78,7 @@ def add_user(resp):
     if not is_admin(resp):
         response_object['message'] = 'You do not have permission to do that.'
         return jsonify(response_object), 401
- 
+
     if not post_data:
         return jsonify(response_object), 400
 
