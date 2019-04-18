@@ -14,21 +14,21 @@ exports[`UsersList renders a snapshot properly 1`] = `
   >
     <thead>
       <tr>
-        <td>
+        <th>
           ID
-        </td>
-        <td>
+        </th>
+        <th>
           Email
-        </td>
-        <td>
+        </th>
+        <th>
           Username
-        </td>
-        <td>
+        </th>
+        <th>
           Active
-        </td>
-        <td>
+        </th>
+        <th>
           Admin
-        </td>
+        </th>
       </tr>
     </thead>
     <tbody>

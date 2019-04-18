@@ -1,3 +1,4 @@
+import sys
 import unittest
 import coverage
 from flask.cli import FlaskGroup
@@ -34,7 +35,7 @@ def test():
     if result.wasSuccessful():
         return 0
 
-    return 1
+    sys.exit(result)
 
 
 @cli.command('seed_db')
@@ -50,6 +51,7 @@ def seed_db():
         password='greaterthaneight'))
     db.session.commit()
 
+
 @cli.command()
 def cov():
     """Runs the unit tests with coverage."""
@@ -63,7 +65,7 @@ def cov():
         COV.html_report()
         COV.erase()
         return 0
-    return 1
+    sys.exit(result)
 
 
 if __name__ == '__main__':

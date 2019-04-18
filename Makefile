@@ -11,4 +11,4 @@ user-test:
 user-test-cov:
 				docker-compose -f docker-compose-dev.yml exec users python manage.py cov
 client-test:
-				docker-compose -f docker-compose-dev.yml exec client npm test
+				docker-compose -f docker-compose-dev.yml exec client npm test -- --verbose
