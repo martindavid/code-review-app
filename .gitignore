@@ -124,3 +124,4 @@ dmypy.json
 tags
 htmlcov/
 .tern-port
+node_modules/
