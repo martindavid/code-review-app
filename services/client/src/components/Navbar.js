@@ -26,7 +26,7 @@ const Navbar = ({ title, isAuthenticated }) => {
             <Link to='/' className='navbar-item'>Home</Link>
             <Link to='/about' className='navbar-item'>About</Link>
             { isAuthenticated && 
-                <Link to='/status' className='navbar-item'>Status</Link> }
+                <Link to='/status' className='navbar-item'>User Status</Link> }
           </div>
           <div className='navbar-end'>
             {
@@ -34,10 +34,10 @@ const Navbar = ({ title, isAuthenticated }) => {
                 <Link to='/register' className='navbar-item'>Register</Link>
             }
             { !isAuthenticated &&
-                <Link to='/login' className='navbar-item'>Login</Link> 
+                <Link to='/login' className='navbar-item'>Log In</Link> 
             }
             { isAuthenticated && 
-                <Link to='/logout' className='navbar-item'>Logout</Link> 
+                <Link to='/logout' className='navbar-item'>Log Out</Link> 
             }
           </div>
         </div>

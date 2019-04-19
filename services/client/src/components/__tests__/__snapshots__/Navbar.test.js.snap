@@ -62,7 +62,7 @@ exports[`Navbar renders a snapshot properly 1`] = `
           href="/login"
           onClick={[Function]}
         >
-          Login
+          Log In
         </a>
       </div>
     </div>
