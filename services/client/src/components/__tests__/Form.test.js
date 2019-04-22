@@ -13,8 +13,7 @@ const testData = [
       email: '',
       password: '',
     },
-    handleUserFormSubmit: jest.fn(),
-    handleFormChange: jest.fn(),
+    loginUser: jest.fn(),
     isAuthenticated: false
   },
   {
@@ -24,8 +23,7 @@ const testData = [
       email: '',
       password: ''
     },
-    handleUserFormSubmit: jest.fn(),
-    handleFormChange: jest.fn(),
+    loginUser: jest.fn(),
     isAuthenticated: false,
   },
 ];
@@ -49,19 +47,20 @@ describe('When not authenticated', () => {
 
     it(`${el.formType} Form submits the form properly`, () => {
       const wrapper = shallow(component);
+      wrapper.instance().handleUserFormSubmit = jest.fn()
+      wrapper.update();
       const input = wrapper.find('input[type="email"]');
       // make sure no handler has been called 
-      expect(el.handleUserFormSubmit).toHaveBeenCalledTimes(0);
-      expect(el.handleFormChange).toHaveBeenCalledTimes(0);
+      expect(wrapper.instance().handleUserFormSubmit).toHaveBeenCalledTimes(0);
 
       // simulate input change
-      input.simulate('change');
-      expect(el.handleFormChange).toHaveBeenCalledTimes(1);
+      input.simulate(
+        'change', { target: { name: 'email', value: 'test@test.com' }});
 
       // simulat form submit
       wrapper.find('form').simulate('submit', el.formData);
-      expect(el.handleUserFormSubmit).toHaveBeenCalledWith(el.formData);
-      expect(el.handleUserFormSubmit).toHaveBeenCalledTimes(1);
+      expect(wrapper.instance().handleUserFormSubmit).toHaveBeenCalledWith(el.formData);
+      expect(wrapper.instance().handleUserFormSubmit).toHaveBeenCalledTimes(1);
 
     })
 

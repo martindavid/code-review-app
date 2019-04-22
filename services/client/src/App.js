@@ -15,14 +15,7 @@ class App extends Component {
     super();
     this.state = {
       users: [],
-      username: '',
-      email: '',
       title: 'Code Review App',
-      formData: {
-        username: '',
-        email: '',
-        password: ''
-      },
       isAuthenticated: false
     }
   };
@@ -35,65 +28,6 @@ class App extends Component {
 
   componentDidMount(){
     this.getUsers();
-  };
-
-  addUser = (e) => {
-    e.preventDefault();
-    const data = {
-      username: this.state.username,
-      email: this.state.email,
-    };
-    axios.post(`${process.env.REACT_APP_USERS_SERVICE_URL}/users`, data)
-      .then((res) => {
-        this.getUsers();
-        this.setState({ username: '', email: '' })
-      }) 
-      .catch((err) => console.log(err));
-  };
-
-  clearFormState = () => {
-    this.setState({
-      formData: {username: '', email: '', password: ''},
-      username: '',
-      email: ''
-    });
-  };
-
-  handleChange = (e) => {
-    const obj = {};
-    obj[e.target.name] = e.target.value;
-    this.setState(obj);
-  };
-
-  handleFormChange = (e) => {
-    var formData = this.state.formData;
-    formData[e.target.name] = e.target.value;
-    this.setState(formData);
-  };
-
-  handleUserFormSubmit = (e) => {
-    e.preventDefault();
-    const { formData } = this.state;
-    const formType = window.location.href.split('/').reverse()[0]
-    let data = {
-      email: formData.email,
-      password: formData.password
-    }
-    if (formType === 'register') {
-      data.username = formData.username;
-    }
-
-    const url = `${process.env.REACT_APP_USERS_SERVICE_URL}/auth/${formType}`;
-    axios.post(url, data)
-      .then((res) => {
-        this.clearFormState();
-        window.localStorage.setItem('authToken', res.data.auth_token);
-        this.setState({ isAuthenticated: true });
-        this.getUsers();
-      })
-      .catch((err) => {
-        console.log(err);
-      })
   };
 
   getUsers = () => {
@@ -109,8 +43,14 @@ class App extends Component {
     this.setState({ isAuthenticated: false });
   }
 
+  loginUser = (token) => {
+    window.localStorage.setItem('authToken', token);
+    this.setState({ isAuthenticated: true });
+    this.getUsers();
+  }
+
   render() {
-    const { email, username, title, formData, isAuthenticated } = this.state;
+    const {  isAuthenticated, title } = this.state;
     return (
       <React.Fragment>
         <Navbar title={title} isAuthenticated={isAuthenticated} />
@@ -127,10 +67,8 @@ class App extends Component {
                   <Route exact path='/register' render={() => (
                     <Form
                       formType={'Register'}
-                      formData={formData}
-                      handleFormChange={this.handleFormChange}
-                      handleUserFormSubmit={this.handleUserFormSubmit}
                       isAuthenticated={isAuthenticated}
+                      loginUser={this.loginUser}
                     />
                   )} />
                 <Route exact path='/status' render={() => (
@@ -139,9 +77,7 @@ class App extends Component {
                   <Route exact path='/login' render={() => (
                     <Form
                       formType={'Login'}
-                      formData={formData}
-                      handleFormChange={this.handleFormChange}
-                      handleUserFormSubmit={this.handleUserFormSubmit}
+                      loginUser={this.loginUser}
                       isAuthenticated={isAuthenticated}
                     />
                   )} />

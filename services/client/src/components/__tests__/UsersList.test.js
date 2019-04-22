@@ -32,7 +32,6 @@ test('UsersList render properly', () => {
   // Table Head
   expect(wrapper.find('thead').length).toBe(1);
   const th = wrapper.find('th');
-  console.log(th);
   expect(th.length).toBe(5);
   expect(th.get(0).props.children).toBe('ID');
   expect(th.get(1).props.children).toBe('Email');
