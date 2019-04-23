@@ -24,10 +24,10 @@ describe('Register', () => {
       .get('form')
       .get('input[disabled]')
       .get('.validation-list > .error').contains(
-        'Password must be greater than 10 charaters.')
+        'Password must be greater than 10 characters.')
       .get('input[name="password"]').type(password)
       .get('.validation-list')
-      .get('validation-list > .error').contains(
+      .get('.validation-list > .error').contains(
         'Password must be greater than 10 characters.').should('not.be.visible')
       .get('.validation-list > .success').contains(
         'Password must be greater than 10 characters.');
@@ -45,7 +45,7 @@ describe('Register', () => {
       .visit('/register')
       .get('input[name="username"]').type(username)
       .get('input[name="email"]').type(email)
-      .get('input[name="password"]').type('test')
+      .get('input[name="password"]').type(password)
       .get('input[type="submit"]').click()
       .wait(100)
 
