@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
 import axios from 'axios';
+import { registerFormRules, loginFormRules } from './form-rules';
+import FormErrors from './FormErrors';
 
 
 class Form extends Component {
@@ -12,18 +14,60 @@ class Form extends Component {
         username: '',
         email: '',
         password: ''
-      }
+      },
+      registerFormRules: registerFormRules,
+      loginFormRules: loginFormRules,
+      valid: false
     }
   }
 
   componentDidMount() {
     this.clearForm();
+    this.validateForm();
   }
 
   componentWillReceiveProps(nextProps) {
     if (this.props.formType !== nextProps.formType) {
       this.clearForm();
+      this.validateForm();
     }
+  }
+
+  validateForm = () => {
+    const self = this;
+    const { formData } = this.state;
+    self.resetRules();
+    if (self.props.formType === 'Register') {
+      const formRules = self.state.registerFormRules;
+      if (formData.password.length > 10) formRules[3].valid = true;
+      self.setState({registerFormRules: formRules});
+      if (self.allTrue()) self.setState({valid: true});
+    }
+  }
+
+  allTrue = () => {
+    let formRules = loginFormRules;
+    if (this.props.formType === 'Register') {
+      formRules = registerFormRules;
+    }
+    for (const rule of formRules) {
+      if (!rule.valid) return false;
+    }
+    return true;
+  }
+
+  resetRules = () => {
+    const registerFormRules = this.state.registerFormRules;
+    for (const rule of registerFormRules) {
+      rule.valid = false;
+    }
+    this.setState({ registerFormRules: registerFormRules });
+    const loginFormRules = this.state.loginFormRules;
+    for (const rule of loginFormRules) {
+      rule.valid = false;
+    }
+    this.setState({ loginFormRules: loginFormRules });
+    this.setState({ valid:false })
   }
 
   clearForm = () => {
@@ -36,6 +80,7 @@ class Form extends Component {
     const obj = this.state.formData;
     obj[e.target.name] = e.target.value;
     this.setState(obj);
+    this.validateForm();
   }
 
   handleUserFormSubmit = (e) => {
@@ -60,11 +105,18 @@ class Form extends Component {
   render() {
 
     const { formType, isAuthenticated } = this.props;
-    const { formData } = this.state;
+    const { formData, valid, loginFormRules, registerFormRules } = this.state;
 
     if (isAuthenticated) {
       return <Redirect to="/" />
     };
+
+    let formRules = loginFormRules;
+
+    if (formType === 'Register') {
+      formRules = registerFormRules;
+    }
+
     return (
       <div>
         {formType === 'Login' && 
@@ -74,6 +126,10 @@ class Form extends Component {
           <h1 className='title is-1'>Register</h1>
         }
         <hr/><br/>
+        <FormErrors
+          formType={formType}
+          formRules={formRules}
+        />
         <form onSubmit={this.handleUserFormSubmit}>
           {formType === 'Register' && 
             <div className='field'>
@@ -112,6 +168,7 @@ class Form extends Component {
           </div>
           <input
             type='submit'
+            disabled={!valid}
             className='button is-primary is-medium is-fullwidth'
             value='Submit'
           />

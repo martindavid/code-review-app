@@ -6,7 +6,7 @@ import Navbar from './components/Navbar';
 import About from './components/About';
 import Logout from './components/Logout';
 import UserStatus from './components/UserStatus';
-import Form from './components/Form';
+import Form from './components/forms/Form';
 
 
 class App extends Component {
