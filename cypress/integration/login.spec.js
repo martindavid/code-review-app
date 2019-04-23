@@ -2,7 +2,7 @@ const randomstring = require('randomstring');
 
 const username = randomstring.generate();
 const email = `${username}@test.com`;
-const password = 'test';
+const password = 'greaterthantest';
 
 describe('Login', () => {
   it('should display the login form', () => {

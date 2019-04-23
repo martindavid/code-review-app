@@ -2,6 +2,7 @@ const randomstring = require('randomstring');
 
 const username = randomstring.generate();
 const email = `${username}@test.com`;
+const password = 'greaterthanten';
 
 describe('Register', () => {
   it('should display the registration form', () => {
@@ -24,7 +25,7 @@ describe('Register', () => {
       .get('input[disabled]')
       .get('.validation-list > .error').contains(
         'Password must be greater than 10 charaters.')
-      .get('input[name="password"]').type('greaterthanten')
+      .get('input[name="password"]').type(password)
       .get('.validation-list')
       .get('validation-list > .error').contains(
         'Password must be greater than 10 characters.').should('not.be.visible')

@@ -2,7 +2,7 @@ const randomstring = require('randomstring');
 
 const username = randomstring.generate();
 const email = `${username}@test.com`;
-const password = 'test';
+const password = 'greaterthanten';
 
 
 describe('Status', () => {

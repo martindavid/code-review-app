@@ -34,13 +34,37 @@ class Form extends Component {
   }
 
   validateForm = () => {
+    console.log("Call validate form");
     const self = this;
     const { formData } = this.state;
     self.resetRules();
+    console.log(self.state);
     if (self.props.formType === 'Register') {
       const formRules = self.state.registerFormRules;
-      if (formData.password.length > 10) formRules[3].valid = true;
+      if (formData.username.length > 5) {
+        formRules[0].valid = true;
+      }
+      if (formData.email.length > 5) {
+        formRules[1].valid = true;
+      }
+      if (this.validateEmail(formData.email)) {
+        formRules[2].valid = true;
+      }
+      if (formData.password.length > 10) {
+        formRules[3].valid = true;
+      }
       self.setState({registerFormRules: formRules});
+      if (self.allTrue()) {
+        self.setState({valid: true});
+      }
+    }
+
+    // validate login form
+    if (self.props.formType === 'Login') {
+      const formRules = self.state.loginFormRules;
+      if (formData.email.length > 0) formRules[0].valid = true;
+      if (formData.password.length > 0) formRules[1].valid = true;
+      self.setState({loginFormRules: formRules});
       if (self.allTrue()) self.setState({valid: true});
     }
   }
@@ -68,6 +92,12 @@ class Form extends Component {
     }
     this.setState({ loginFormRules: loginFormRules });
     this.setState({ valid:false })
+  }
+
+  validateEmail = (email) => {
+    // eslint-disable-next-line
+    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(email);
   }
 
   clearForm = () => {
