@@ -42,6 +42,7 @@ describe('Login', () => {
       .get('table')
       .find('tbody > tr').last()
       .find('td').contains(username);
+    cy.get('.notification.is-success').contains('Welcome!');
 
     cy.get('.navbar-burger').click();
     cy.get('.navbar-menu').within(() => {
