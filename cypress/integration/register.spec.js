@@ -46,6 +46,38 @@ describe('Register', () => {
     );
   });
 
+  it('should allow a user to register', () => {
+    // register user
+    cy.visit('/register')
+      .get('input[name="username"]')
+      .type(username)
+      .get('input[name="email"]')
+      .type(email)
+      .get('input[name="password"]')
+      .type(password)
+      .get('input[type="submit"]')
+      .click()
+      .wait(100);
+
+    // assert user is redirected to '/'
+    // assert '/' is displayed properly
+    cy.contains('All Users');
+    cy.contains(username);
+    cy.get('.navbar-burger').click();
+    cy.get('.navbar-menu').within(() => {
+      cy.get('.navbar-item')
+        .contains('User Status')
+        .get('.navbar-item')
+        .contains('Log Out')
+        .get('.navbar-item')
+        .contains('Log In')
+        .should('not.be.visible')
+        .get('.navbar-item')
+        .contains('Register')
+        .should('not.be.visible');
+    });
+  });
+
   it('should throw an error if the username is taken', () => {
     // register user with duplicate user name
     cy.visit('/register')
@@ -82,12 +114,12 @@ describe('Register', () => {
   });
 
   it('should throw an error if the email is taken', () => {
-    // register user with duplicate user name
+    // register user with duplicate email
     cy.visit('/register')
       .get('input[name="username"]')
-      .type(username)
+      .type(`${username}unique`)
       .get('input[name="email"]')
-      .type(`${email}unique`)
+      .type(email)
       .get('input[name="password"]')
       .type(password)
       .get('input[type="submit"]')
@@ -114,37 +146,5 @@ describe('Register', () => {
       .should('not.be.visible')
       .get('.notification.is-danger')
       .contains('That user already exists');
-  });
-
-  it('should allow a user to register', () => {
-    // register user
-    cy.visit('/register')
-      .get('input[name="username"]')
-      .type(username)
-      .get('input[name="email"]')
-      .type(email)
-      .get('input[name="password"]')
-      .type(password)
-      .get('input[type="submit"]')
-      .click()
-      .wait(100);
-
-    // assert user is redirected to '/'
-    // assert '/' is displayed properly
-    cy.contains('All Users');
-    cy.contains(username);
-    cy.get('.navbar-burger').click();
-    cy.get('.navbar-menu').within(() => {
-      cy.get('.navbar-item')
-        .contains('User Status')
-        .get('.navbar-item')
-        .contains('Log Out')
-        .get('.navbar-item')
-        .contains('Log In')
-        .should('not.be.visible')
-        .get('.navbar-item')
-        .contains('Register')
-        .should('not.be.visible');
-    });
   });
 });
