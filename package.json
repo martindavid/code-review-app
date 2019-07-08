@@ -1,5 +1,8 @@
 {
   "name": "code-review-app",
+  "scripts": {
+    "test": "cypress run --config baseUrl=http://localhost"
+  },
   "devDependencies": {
     "cypress": "^3.2.0",
     "randomstring": "^1.1.5"
