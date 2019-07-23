@@ -1,21 +1,21 @@
-import React, {Component} from 'react';
-import {Redirect} from 'react-router-dom';
-import axios from 'axios';
-import {registerFormRules, loginFormRules} from './form-rules';
-import FormErrors from './FormErrors';
+import React, { Component } from "react";
+import { Redirect } from "react-router-dom";
+import axios from "axios";
+import { registerFormRules, loginFormRules } from "./form-rules";
+import FormErrors from "./FormErrors";
 
 class Form extends Component {
   constructor(props) {
     super(props);
     this.state = {
       formData: {
-        username: '',
-        email: '',
-        password: '',
+        username: "",
+        email: "",
+        password: ""
       },
       registerFormRules: registerFormRules,
       loginFormRules: loginFormRules,
-      valid: false,
+      valid: false
     };
   }
 
@@ -32,12 +32,10 @@ class Form extends Component {
   }
 
   validateForm = () => {
-    console.log('Call validate form');
     const self = this;
-    const {formData} = this.state;
+    const { formData } = this.state;
     self.resetRules();
-    console.log(self.state);
-    if (self.props.formType === 'Register') {
+    if (self.props.formType === "Register") {
       const formRules = self.state.registerFormRules;
       if (formData.username.length > 5) {
         formRules[0].valid = true;
@@ -51,25 +49,25 @@ class Form extends Component {
       if (formData.password.length > 10) {
         formRules[3].valid = true;
       }
-      self.setState({registerFormRules: formRules});
+      self.setState({ registerFormRules: formRules });
       if (self.allTrue()) {
-        self.setState({valid: true});
+        self.setState({ valid: true });
       }
     }
 
     // validate login form
-    if (self.props.formType === 'Login') {
+    if (self.props.formType === "Login") {
       const formRules = self.state.loginFormRules;
       if (formData.email.length > 0) formRules[0].valid = true;
       if (formData.password.length > 0) formRules[1].valid = true;
-      self.setState({loginFormRules: formRules});
-      if (self.allTrue()) self.setState({valid: true});
+      self.setState({ loginFormRules: formRules });
+      if (self.allTrue()) self.setState({ valid: true });
     }
   };
 
   allTrue = () => {
     let formRules = loginFormRules;
-    if (this.props.formType === 'Register') {
+    if (this.props.formType === "Register") {
       formRules = registerFormRules;
     }
     for (const rule of formRules) {
@@ -83,13 +81,13 @@ class Form extends Component {
     for (const rule of registerFormRules) {
       rule.valid = false;
     }
-    this.setState({registerFormRules: registerFormRules});
+    this.setState({ registerFormRules: registerFormRules });
     const loginFormRules = this.state.loginFormRules;
     for (const rule of loginFormRules) {
       rule.valid = false;
     }
-    this.setState({loginFormRules: loginFormRules});
-    this.setState({valid: false});
+    this.setState({ loginFormRules: loginFormRules });
+    this.setState({ valid: false });
   };
 
   validateEmail = email => {
@@ -100,7 +98,7 @@ class Form extends Component {
 
   clearForm = () => {
     this.setState({
-      formData: {username: '', email: '', password: ''},
+      formData: { username: "", email: "", password: "" }
     });
   };
 
@@ -113,12 +111,12 @@ class Form extends Component {
 
   handleUserFormSubmit = e => {
     e.preventDefault();
-    const {formType} = this.props;
+    const { formType } = this.props;
     const data = {
       email: this.state.formData.email,
-      password: this.state.formData.password,
+      password: this.state.formData.password
     };
-    if (formType === 'Register') {
+    if (formType === "Register") {
       data.username = this.state.formData.username;
     }
     const url = `${
@@ -131,18 +129,18 @@ class Form extends Component {
         this.props.loginUser(res.data.auth_token);
       })
       .catch(err => {
-        if (formType === 'Login') {
-          this.props.createMessage('User does not exist.', 'danger');
+        if (formType === "Login") {
+          this.props.createMessage("User does not exist.", "danger");
         }
-        if (formType === 'Register') {
-          this.props.createMessage('That user already exists.', 'danger');
+        if (formType === "Register") {
+          this.props.createMessage("That user already exists.", "danger");
         }
       });
   };
 
   render() {
-    const {formType, isAuthenticated} = this.props;
-    const {formData, valid, loginFormRules, registerFormRules} = this.state;
+    const { formType, isAuthenticated } = this.props;
+    const { formData, valid, loginFormRules, registerFormRules } = this.state;
 
     if (isAuthenticated) {
       return <Redirect to="/" />;
@@ -150,19 +148,19 @@ class Form extends Component {
 
     let formRules = loginFormRules;
 
-    if (formType === 'Register') {
+    if (formType === "Register") {
       formRules = registerFormRules;
     }
 
     return (
       <div>
-        {formType === 'Login' && <h1 className="title is-1">Log In</h1>}
-        {formType === 'Register' && <h1 className="title is-1">Register</h1>}
+        {formType === "Login" && <h1 className="title is-1">Log In</h1>}
+        {formType === "Register" && <h1 className="title is-1">Register</h1>}
         <hr />
         <br />
         <FormErrors formType={formType} formRules={formRules} />
         <form onSubmit={this.handleUserFormSubmit}>
-          {formType === 'Register' && (
+          {formType === "Register" && (
             <div className="field">
               <input
                 name="username"
