@@ -1,29 +1,29 @@
-import React, {Component} from 'react';
-import {Route, Switch} from 'react-router-dom';
-import axios from 'axios';
-import UsersList from './components/UsersList';
-import Navbar from './components/Navbar';
-import About from './components/About';
-import Logout from './components/Logout';
-import UserStatus from './components/UserStatus';
-import Form from './components/forms/Form';
-import Message from './components/Message';
+import React, { Component } from "react";
+import { Route, Switch } from "react-router-dom";
+import axios from "axios";
+import UsersList from "./components/UsersList";
+import Navbar from "./components/Navbar";
+import About from "./components/About";
+import Logout from "./components/Logout";
+import UserStatus from "./components/UserStatus";
+import Form from "./components/forms/Form";
+import Message from "./components/Message";
 
 class App extends Component {
   constructor() {
     super();
     this.state = {
       users: [],
-      title: 'Code Review App',
+      title: "Code Review App",
       isAuthenticated: false,
       messageName: null,
-      messageType: null,
+      messageType: null
     };
   }
 
   componentWillMount() {
-    if (window.localStorage.getItem('authToken')) {
-      this.setState({isAuthenticated: true});
+    if (window.localStorage.getItem("authToken")) {
+      this.setState({ isAuthenticated: true });
     }
   }
 
@@ -31,10 +31,21 @@ class App extends Component {
     this.getUsers();
   }
 
-  createMessage = (name = 'Sanity Check', type = 'success') => {
+  createMessage = (name = "Sanity Check", type = "success") => {
     this.setState({
       messageName: name,
-      messageType: type,
+      messageType: type
+    });
+
+    setTimeout(() => {
+      this.removeMessage();
+    }, 3000);
+  };
+
+  removeMessage = () => {
+    this.setState({
+      messageName: null,
+      messageType: null
     });
   };
 
@@ -42,7 +53,7 @@ class App extends Component {
     axios
       .get(`${process.env.REACT_APP_USERS_SERVICE_URL}/users`)
       .then(res => {
-        this.setState({users: res.data.data.users});
+        this.setState({ users: res.data.data.users });
       })
       .catch(err => {
         console.log(err);
@@ -51,25 +62,29 @@ class App extends Component {
 
   logoutUser = () => {
     window.localStorage.clear();
-    this.setState({isAuthenticated: false});
+    this.setState({ isAuthenticated: false });
   };
 
   loginUser = token => {
-    window.localStorage.setItem('authToken', token);
-    this.setState({isAuthenticated: true});
+    window.localStorage.setItem("authToken", token);
+    this.setState({ isAuthenticated: true });
     this.getUsers();
-    this.createMessage('Welcome!', 'success');
+    this.createMessage("Welcome!", "success");
   };
 
   render() {
-    const {isAuthenticated, title, messageType, messageName} = this.state;
+    const { isAuthenticated, title, messageType, messageName } = this.state;
     return (
       <React.Fragment>
         <Navbar title={title} isAuthenticated={isAuthenticated} />
         <section className="section">
           <div className="container">
             {messageType && messageName && (
-              <Message messageName={messageName} messageType={messageType} />
+              <Message
+                removeMessage={this.removeMessage}
+                messageName={messageName}
+                messageType={messageType}
+              />
             )}
             <div className="columns">
               <div className="column is-half">
@@ -86,7 +101,7 @@ class App extends Component {
                     path="/register"
                     render={() => (
                       <Form
-                        formType={'Register'}
+                        formType={"Register"}
                         isAuthenticated={isAuthenticated}
                         loginUser={this.loginUser}
                         createMessage={this.createMessage}
@@ -105,7 +120,7 @@ class App extends Component {
                     path="/login"
                     render={() => (
                       <Form
-                        formType={'Login'}
+                        formType={"Login"}
                         loginUser={this.loginUser}
                         isAuthenticated={isAuthenticated}
                         createMessage={this.createMessage}

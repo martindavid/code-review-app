@@ -126,3 +126,4 @@ htmlcov/
 .tern-port
 node_modules/
 .DS_Store
+cypress/.DS_Store
