@@ -54,7 +54,7 @@ class Users(Resource):
                 }
                 return response_object, HTTPStatus.OK
         except ValueError:
-            return response_object, HTTPStatus.BAD_REQUEST
+            return response_object, HTTPStatus.NOT_FOUND
 
 
 class UsersList(Resource):
@@ -79,7 +79,7 @@ class UsersList(Resource):
         }
         if not is_admin(resp):
             response_object['message'] = 'You do not have permission to do that.'
-            return response_object, HTTPStatus.FORBIDDEN
+            return response_object, HTTPStatus.UNAUTHORIZED
 
         if not post_data:
             return response_object, HTTPStatus.BAD_REQUEST
