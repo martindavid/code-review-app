@@ -26,7 +26,8 @@ class TestUserService(BaseTestCase):
         with self.client:
             resp_login = self.client.post(
                 "/auth/login",
-                data=json.dumps({"email": "test@test.com", "password": "test"}),
+                data=json.dumps(
+                    {"email": "test@test.com", "password": "test"}),
                 content_type="application/json",
             )
             token = json.loads(resp_login.data.decode())["auth_token"]
@@ -44,7 +45,8 @@ class TestUserService(BaseTestCase):
             )
             data = json.loads(response.data.decode())
             self.assertEqual(response.status_code, 201)
-            self.assertIn("mvalentino@martinlabs.me was added", data["message"])
+            self.assertIn("mvalentino@martinlabs.me was added",
+                          data["message"])
             self.assertIn("success", data["status"])
 
     def test_add_user_invalid_json(self):
@@ -56,7 +58,8 @@ class TestUserService(BaseTestCase):
         with self.client:
             resp_login = self.client.post(
                 "/auth/login",
-                data=json.dumps({"email": "test@test.com", "password": "test"}),
+                data=json.dumps(
+                    {"email": "test@test.com", "password": "test"}),
                 content_type="application/json",
             )
             token = json.loads(resp_login.data.decode())["auth_token"]
@@ -82,7 +85,8 @@ class TestUserService(BaseTestCase):
         with self.client:
             resp_login = self.client.post(
                 "/auth/login",
-                data=json.dumps({"email": "test@test.com", "password": "test"}),
+                data=json.dumps(
+                    {"email": "test@test.com", "password": "test"}),
                 content_type="application/json",
             )
             token = json.loads(resp_login.data.decode())["auth_token"]
@@ -111,7 +115,8 @@ class TestUserService(BaseTestCase):
         with self.client:
             resp_login = self.client.post(
                 "/auth/login",
-                data=json.dumps({"email": "test@test.com", "password": "test"}),
+                data=json.dumps(
+                    {"email": "test@test.com", "password": "test"}),
                 content_type="application/json",
             )
             token = json.loads(resp_login.data.decode())["auth_token"]
@@ -148,7 +153,8 @@ class TestUserService(BaseTestCase):
 
     def test_single_user(self):
         """Ensure get single user behave correctly."""
-        user = add_user("mvalentino", "mvalentino@martinlabs.me", "greaterthaneight")
+        user = add_user(
+            "mvalentino", "mvalentino@martinlabs.me", "greaterthaneight")
         with self.client:
             response = self.client.get(f"/users/{user.id}")
             data = json.loads(response.data.decode())
@@ -177,7 +183,8 @@ class TestUserService(BaseTestCase):
     def test_all_users(self):
         """Ensure get all users behave correctly."""
         add_user("mvalentino", "mvalentino@martinlabs.me", "greaterthaneight")
-        add_user("martin.valentino", "martin.valentino@live.com", "greaterthaneight")
+        add_user("martin.valentino",
+                 "martin.valentino@live.com", "greaterthaneight")
         with self.client:
             response = self.client.get("/users")
             data = json.loads(response.data.decode())
@@ -201,7 +208,8 @@ class TestUserService(BaseTestCase):
         """
         add_user("mvalentino", "mvalentino@martinlabs.me", "greaterthaneight")
         add_user(
-            "martin.valentino", "martin.valentino@martinlabs.me", "greaterthaneight"
+            "martin.valentino", "martin.valentino@martinlabs.me",
+            "greaterthaneight"
         )
         with self.client:
             response = self.client.get("/")
@@ -242,14 +250,16 @@ class TestUserService(BaseTestCase):
         with self.client:
             resp_login = self.client.post(
                 "/auth/login",
-                data=json.dumps({"email": "test@test.com", "password": "test"}),
+                data=json.dumps(
+                    {"email": "test@test.com", "password": "test"}),
                 content_type="application/json",
             )
             token = json.loads(resp_login.data.decode())["auth_token"]
             response = self.client.post(
                 "/users",
                 data=json.dumps(
-                    dict(username="mvalentino", email="mvalentino@martinlabs.me")
+                    dict(username="mvalentino",
+                         email="mvalentino@martinlabs.me")
                 ),
                 content_type="application/json",
                 headers={"Authorization": f"Bearer {token}"},
@@ -272,7 +282,8 @@ class TestUserService(BaseTestCase):
         with self.client:
             resp_login = self.client.post(
                 "/auth/login",
-                data=json.dumps({"email": "test@test.com", "password": "test"}),
+                data=json.dumps(
+                    {"email": "test@test.com", "password": "test"}),
                 content_type="application/json",
             )
             token = json.loads(resp_login.data.decode())["auth_token"]
@@ -298,7 +309,8 @@ class TestUserService(BaseTestCase):
         with self.client:
             resp_login = self.client.post(
                 "/auth/login",
-                data=json.dumps({"email": "test@test.com", "password": "test"}),
+                data=json.dumps(
+                    {"email": "test@test.com", "password": "test"}),
                 content_type="application/json",
             )
             token = json.loads(resp_login.data.decode())["auth_token"]
@@ -317,7 +329,8 @@ class TestUserService(BaseTestCase):
             data = json.loads(response.data.decode())
             self.assertEqual(response.status_code, 401)
             self.assertTrue(data["status"] == "fail")
-            self.assertTrue(data["message"] == "You do not have permission to do that.")
+            self.assertTrue(data["message"] ==
+                            "You do not have permission to do that.")
 
 
 if __name__ == "__main__":

@@ -12,20 +12,20 @@ inspect() {
 
 # run server-side tests
 server() {
-  docker-compose -f docker-compose-dev.yml up -d --build
-  docker-compose -f docker-compose-dev.yml exec users python manage.py test
+  docker-compose -d --build
+  docker-compose exec users python manage.py test
   inspect $? users
-  docker-compose -f docker-compose-dev.yml exec users flake8 project
+  docker-compose exec users flake8 project
   inspect $? users-lint
-  docker-compose -f docker-compose-dev.yml down
+  docker-compose down
 }
 
 # run client-side tests
 client() {
-  docker-compose -f docker-compose-dev.yml up -d --build
-  docker-compose -f docker-compose-dev.yml exec client npm test -- --coverage
+  docker-compose up -d --build
+  docker-compose exec client npm test -- --coverage
   inspect $? client
-  docker-compose -f docker-compose-dev.yml down
+  docker-compose down
 }
 
 # run e2e tests
@@ -39,14 +39,14 @@ e2e() {
 
 # run all tests
 all() {
-  docker-compose -f docker-compose-dev.yml up -d --build
-  docker-compose -f docker-compose-dev.yml exec users python manage.py test
+  docker-compose up -d --build
+  docker-compose exec users python manage.py test
   inspect $? users
-  docker-compose -f docker-compose-dev.yml exec users flake8 project
+  docker-compose exec users flake8 project
   inspect $? users-lint
-  docker-compose -f docker-compose-dev.yml exec client npm test -- --coverage
+  docker-compose exec client npm test -- --coverage
   inspect $? client
-  docker-compose -f docker-compose-dev.yml down
+  docker-compose down
   e2e
 }
 

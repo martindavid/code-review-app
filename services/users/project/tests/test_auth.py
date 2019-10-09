@@ -82,7 +82,8 @@ class TestAuthBlueprint(BaseTestCase):
         """
         with self.client:
             response = self.client.post(
-                "/auth/register", data=json.dumps({}), content_type="application/json"
+                "/auth/register", data=json.dumps({}),
+                content_type="application/json"
             )
             data = json.loads(response.data.decode())
             self.assertEqual(response.status_code, 400)
@@ -111,7 +112,8 @@ class TestAuthBlueprint(BaseTestCase):
         with self.client:
             response = self.client.post(
                 "/auth/register",
-                data=json.dumps({"email": "test@test.com", "password": "test"}),
+                data=json.dumps(
+                    {"email": "test@test.com", "password": "test"}),
                 content_type="application/json",
             )
             data = json.loads(response.data.decode())
@@ -127,7 +129,8 @@ class TestAuthBlueprint(BaseTestCase):
             add_user("test", "test@test.com", "test")
             response = self.client.post(
                 "/auth/login",
-                data=json.dumps({"email": "test@test.com", "password": "test"}),
+                data=json.dumps(
+                    {"email": "test@test.com", "password": "test"}),
                 content_type="application/json",
             )
             data = json.loads(response.data.decode())
@@ -144,7 +147,8 @@ development        """
         with self.client:
             response = self.client.post(
                 "/auth/login",
-                data=json.dumps({"email": "test@test.com", "password": "test"}),
+                data=json.dumps(
+                    {"email": "test@test.com", "password": "test"}),
                 content_type="application/json",
             )
             data = json.loads(response.data.decode())
@@ -161,7 +165,8 @@ development        """
         with self.client:
             resp_login = self.client.post(
                 "/auth/login",
-                data=json.dumps({"email": "test@test.com", "password": "test"}),
+                data=json.dumps(
+                    {"email": "test@test.com", "password": "test"}),
                 content_type="application/json",
             )
 
@@ -186,7 +191,8 @@ development        """
             data = json.loads(response.data.decode())
             self.assertEqual(response.status_code, 401)
             self.assertTrue(data["status"] == "fail")
-            self.assertTrue(data["message"] == "Invalid token. Please log in again.")
+            self.assertTrue(data["message"] ==
+                            "Invalid token. Please log in again.")
 
     def test_invalid_logout_expired_token(self):
         """
@@ -197,7 +203,8 @@ development        """
         with self.client:
             resp_login = self.client.post(
                 "/auth/login",
-                data=json.dumps({"email": "test@test.com", "password": "test"}),
+                data=json.dumps(
+                    {"email": "test@test.com", "password": "test"}),
                 content_type="application/json",
             )
 
@@ -220,7 +227,8 @@ development        """
         with self.client:
             resp_login = self.client.post(
                 "/auth/login",
-                data=json.dumps({"email": "test@test.com", "password": "test"}),
+                data=json.dumps(
+                    {"email": "test@test.com", "password": "test"}),
                 content_type="application/json",
             )
             token = json.loads(resp_login.data.decode())["auth_token"]
@@ -243,7 +251,8 @@ development        """
             data = json.loads(response.data.decode())
             self.assertEqual(response.status_code, 401)
             self.assertTrue(data["status"] == "fail")
-            self.assertTrue(data["message"] == "Invalid token. Please log in again.")
+            self.assertTrue(data["message"] ==
+                            "Invalid token. Please log in again.")
 
     def test_invalid_logout_inactive(self):
         add_user("test", "test@test.com", "test")
@@ -254,7 +263,8 @@ development        """
         with self.client:
             resp_login = self.client.post(
                 "/auth/login",
-                data=json.dumps({"email": "test@test.com", "password": "test"}),
+                data=json.dumps(
+                    {"email": "test@test.com", "password": "test"}),
                 content_type="application/json",
             )
             token = json.loads(resp_login.data.decode())["auth_token"]
@@ -275,7 +285,8 @@ development        """
         with self.client:
             resp_login = self.client.post(
                 "/auth/login",
-                data=json.dumps({"email": "test@test.com", "password": "test"}),
+                data=json.dumps(
+                    {"email": "test@test.com", "password": "test"}),
                 content_type="application/json",
             )
             token = json.loads(resp_login.data.decode())["auth_token"]

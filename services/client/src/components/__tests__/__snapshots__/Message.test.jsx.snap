@@ -6,6 +6,7 @@ exports[`When given a danger message Message renders a snapshot properly 1`] = `
 >
   <button
     className="delete"
+    onClick={[Function]}
     type="button"
   />
   <span>
@@ -20,6 +21,7 @@ exports[`When given a success message Message renders a snapshot properly 1`] = 
 >
   <button
     className="delete"
+    onClick={[Function]}
     type="button"
   />
   <span>

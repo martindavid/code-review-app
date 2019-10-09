@@ -78,7 +78,8 @@ class UsersList(Resource):
             'message': 'Invalid payload'
         }
         if not is_admin(resp):
-            response_object['message'] = 'You do not have permission to do that.'
+            response_object['message'] = \
+                'You do not have permission to do that.'
             return response_object, HTTPStatus.UNAUTHORIZED
 
         if not post_data:
@@ -100,7 +101,8 @@ class UsersList(Resource):
                 response_object['message'] = f'{email} was added!'
                 return response_object, HTTPStatus.CREATED
             else:
-                response_object['message'] = 'Sorry. That email already exists.'
+                response_object['message'] = \
+                    'Sorry. That email already exists.'
                 return response_object, HTTPStatus.BAD_REQUEST
         except (exc.IntegrityError, ValueError):
             db.session.rollback()
