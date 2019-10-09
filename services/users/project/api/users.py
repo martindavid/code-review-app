@@ -1,10 +1,13 @@
-from flask import Blueprint, jsonify, request, render_template
+from flask import Blueprint, request, render_template
+from flask_restful import Resource, Api
+from http import HTTPStatus
 from project.api.models import User
-from project.api.utils import authenticate, is_admin
+from project.api.utils import authenticate_restful, is_admin
 from project import db
 from sqlalchemy import exc
 
 users_blueprint = Blueprint('users', __name__, template_folder='./templates')
+api = Api(users_blueprint)
 
 
 @users_blueprint.route('/', methods=['GET', 'POST'])
@@ -20,85 +23,90 @@ def index():
     return render_template('index.html', users=users)
 
 
-@users_blueprint.route('/users', methods=['GET'])
-def get_all_users():
-    """Get all users"""
-    response_object = {
-        'status': 'success',
-        'data': {
-            'users': [user.to_json() for user in User.query.all()]
+class UsersPing(Resource):
+    def get(self):
+        return {
+            'status': 'success',
+            'message': 'pong!'
         }
-    }
-
-    return jsonify(response_object), 200
 
 
-@users_blueprint.route('/users/<user_id>', methods=['GET'])
-def get_single_user(user_id):
-    """Get single user details"""
-    response_object = {
-        'status': 'fail',
-        'message': 'User does not exist'
-    }
-    try:
-        user = User.query.filter_by(id=int(user_id)).first()
-        if not user:
-            return jsonify(response_object), 404
-        else:
-            response_object = {
-                'status': 'success',
-                'data': {
-                    'id': user.id,
-                    'username': user.username,
-                    'email': user.email,
-                    'active': user.active
+class Users(Resource):
+    def get(self, user_id):
+        """Get single user details"""
+        response_object = {
+            'status': 'fail',
+            'message': 'User does not exist'
+        }
+        try:
+            user = User.query.filter_by(id=int(user_id)).first()
+            if not user:
+                return response_object, HTTPStatus.NOT_FOUND
+            else:
+                response_object = {
+                    'status': 'success',
+                    'data': {
+                        'id': user.id,
+                        'username': user.username,
+                        'email': user.email,
+                        'active': user.active
+                    }
                 }
+                return response_object, HTTPStatus.OK
+        except ValueError:
+            return response_object, HTTPStatus.BAD_REQUEST
+
+
+class UsersList(Resource):
+    method_decorators = {'post': [authenticate_restful]}
+
+    def get(self):
+        """Get all users"""
+        response_object = {
+            'status': 'success',
+            'data': {
+                'users': [user.to_json() for user in User.query.all()]
             }
-            return jsonify(response_object), 200
-    except ValueError:
-        return jsonify(response_object), 404
+        }
+
+        return response_object, HTTPStatus.OK
+
+    def post(self, resp):
+        post_data = request.get_json()
+        response_object = {
+            'status': 'fail',
+            'message': 'Invalid payload'
+        }
+        if not is_admin(resp):
+            response_object['message'] = 'You do not have permission to do that.'
+            return response_object, HTTPStatus.FORBIDDEN
+
+        if not post_data:
+            return response_object, HTTPStatus.BAD_REQUEST
+
+        username = post_data.get('username')
+        email = post_data.get('email')
+        password = post_data.get('password')
+
+        try:
+            user = User.query.filter_by(email=email).first()
+            if not user:
+                db.session.add(User(
+                    username=username,
+                    email=email,
+                    password=password))
+                db.session.commit()
+                response_object['status'] = 'success'
+                response_object['message'] = f'{email} was added!'
+                return response_object, HTTPStatus.CREATED
+            else:
+                response_object['message'] = 'Sorry. That email already exists.'
+                return response_object, HTTPStatus.BAD_REQUEST
+        except (exc.IntegrityError, ValueError):
+            db.session.rollback()
+            return response_object, HTTPStatus.BAD_REQUEST
 
 
-@users_blueprint.route('/users/ping', methods=['GET'])
-def ping_pong():
-    return jsonify({
-        'status': 'success',
-        'message': 'pong!'
-    })
-
-
-@users_blueprint.route('/users', methods=['POST'])
-@authenticate
-def add_user(resp):
-    post_data = request.get_json()
-    response_object = {
-        'status': 'fail',
-        'message': 'Invalid payload'
-    }
-    if not is_admin(resp):
-        response_object['message'] = 'You do not have permission to do that.'
-        return jsonify(response_object), 401
-
-    if not post_data:
-        return jsonify(response_object), 400
-
-    username = post_data.get('username')
-    email = post_data.get('email')
-    password = post_data.get('password')
-    try:
-        user = User.query.filter_by(email=email).first()
-        if not user:
-            db.session.add(User(
-                username=username,
-                email=email,
-                password=password))
-            db.session.commit()
-            response_object['status'] = 'success'
-            response_object['message'] = f'{email} was added!'
-            return jsonify(response_object), 201
-        else:
-            response_object['message'] = 'Sorry. That email already exists.'
-            return jsonify(response_object), 400
-    except (exc.IntegrityError, ValueError):
-        db.session.rollback()
-        return jsonify(response_object), 400
+api.add_resource(UsersPing, '/users/ping')
+api.add_resource(UsersList, '/users')
+api.add_resource(Users, '/users/<user_id>')
